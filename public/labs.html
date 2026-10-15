@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1877f2">
+  <title>LinkUp Pentest Lab Directory</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .lab-directory { max-width: 1050px; margin: 36px auto; padding: 0 22px 48px; color: #1c1e21; }
+    .lab-directory a { color: #1877f2; font-weight: 650; text-decoration: none; }
+    .lab-directory a:hover { text-decoration: underline; }
+    .lab-hero, .lab-group { background: #fff; border: 1px solid #e4e6eb; border-radius: 14px; box-shadow: 0 2px 8px #1c1e2110; padding: 24px; margin-bottom: 18px; }
+    .lab-hero h1 { margin: 0 0 8px; font-size: 28px; }
+    .lab-hero p, .lab-group p { line-height: 1.55; color: #606770; }
+    .lab-boundary { background: #eaf3ff; border-left: 4px solid #1877f2; padding: 12px 16px; border-radius: 8px; }
+    .lab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; }
+    .lab-item { border: 1px solid #e4e6eb; background: #fafbfc; border-radius: 10px; padding: 14px; }
+    .lab-item h3 { margin: 0 0 7px; font-size: 16px; }
+    .lab-item p { margin: 0 0 9px; font-size: 14px; }
+    .lab-endpoint { display: block; overflow-wrap: anywhere; font: 12px ui-monospace, SFMono-Regular, Consolas, monospace; color: #606770; }
+    .lab-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+    .lab-actions a { background:#1877f2; color:white; padding:10px 14px; border-radius:8px; }
+    .lab-actions a.secondary { background:#e7f3ff; color:#1877f2; }
+    @media (max-width: 600px) { .lab-directory { margin-top: 20px; padding-inline: 12px; } .lab-hero,.lab-group { padding: 17px; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left"><a class="brand" href="/" title="LinkUp Home"><span class="brand-symbol">lu</span><span class="brand-text">link<span class="brand-accent">up</span></span></a></div>
+    <nav class="topbar-center" aria-label="Primary Navigation"><a class="nav-tab" href="/">🏠 Home</a><a class="nav-tab active" href="/labs.html">🧪 Pentest Lab</a></nav>
+    <div class="topbar-right"><span class="local-badge"><span class="badge-dot"></span><span class="badge-text">LOCAL LAB</span></span></div>
+  </header>
+  <main class="lab-directory">
+    <section class="lab-hero">
+      <h1>LinkUp Pentest Lab Directory</h1>
+      <p>A multi-page social application and API target for practicing the four-week Web Application & API Penetration Test curriculum. Use a local browser and Burp Suite against this app.</p>
+      <div class="lab-boundary"><strong>Local practice only.</strong> The server binds to <code>127.0.0.1</code>. SSRF targets an in-process mock service, file reads use a virtual catalog, uploads stay in memory, and command injection is simulated without starting an operating-system process.</div>
+      <div class="lab-actions"><a href="/">Open LinkUp social app</a><a class="secondary" href="/lab/reflected?q=practice">Open reflected-XSS page</a><a class="secondary" href="/api/health">Check API health</a></div>
+    </section>
+    <section class="lab-group">
+      <h2>Pages and application areas</h2>
+      <div class="lab-grid">
+        <article class="lab-item"><h3>Social feed and profiles</h3><p>Posts, comments, likes, saves, stories, search, profiles, and account flows. Stored XSS and authorization exercises are reachable here.</p><span class="lab-endpoint">/ · /api/posts · /api/users/:id</span></article>
+        <article class="lab-item"><h3>Creator Studio tools</h3><p>Open redirect, mock SSRF, virtual path traversal, LFI, and simulated command injection tools.</p><span class="lab-endpoint">Open with ⚡ · /api/labs/* · /go?to=...</span></article>
+        <article class="lab-item"><h3>Reflected search results</h3><p>Separate server-rendered page reflecting the search parameter.</p><span class="lab-endpoint">/lab/reflected?q=...</span></article>
+        <article class="lab-item"><h3>This API directory</h3><p>Endpoint inventory and health check for mapping requests and building a Burp project.</p><span class="lab-endpoint">/labs.html · /api/health</span></article>
+      </div>
+    </section>
+    <section class="lab-group">
+      <h2>Exercise and endpoint map</h2>
+      <div class="lab-grid">
+        <article class="lab-item"><h3>Error-based SQL injection</h3><p>Search input is interpolated into SQLite queries and database errors are exposed.</p><span class="lab-endpoint">GET /api/search?q=... · GET /api/labs/sql?username=...</span></article>
+        <article class="lab-item"><h3>Stored and reflected XSS</h3><p>Post/comment content is stored and rendered in the feed; a separate page reflects its query.</p><span class="lab-endpoint">POST /api/posts · POST /api/posts/:id/comments · /lab/reflected?q=...</span></article>
+        <article class="lab-item"><h3>Open redirect</h3><p>Redirect destination is accepted without validation.</p><span class="lab-endpoint">GET /go?to=...</span></article>
+        <article class="lab-item"><h3>SSRF mock service</h3><p>Exercises internal-resource access against fixed in-process mock routes.</p><span class="lab-endpoint">GET /api/labs/ssrf?url=http://mock.internal/status</span></article>
+        <article class="lab-item"><h3>File upload</h3><p>Accepts arbitrary file names and types into volatile memory with a 5 MB size limit.</p><span class="lab-endpoint">POST /api/labs/upload · GET /api/labs/upload · GET /api/labs/upload/:id</span></article>
+        <article class="lab-item"><h3>Path traversal and LFI</h3><p>File lookup and template inclusion are limited to the virtual training catalog.</p><span class="lab-endpoint">GET /api/labs/files?path=... · GET /api/labs/include?page=...</span></article>
+        <article class="lab-item"><h3>Simulated OS command injection</h3><p>Shell separators and a small command set are interpreted in memory; no shell is invoked.</p><span class="lab-endpoint">GET /api/labs/command?name=...</span></article>
+        <article class="lab-item"><h3>IDOR / BOLA</h3><p>Object identifiers expose synthetic profile details without ownership checks.</p><span class="lab-endpoint">GET /api/users · GET /api/users/:id · GET /api/users/:id/posts</span></article>
+        <article class="lab-item"><h3>Authentication and session handling</h3><p>Demo credentials, weak password handling, predictable script-readable session cookies, and unauthenticated API surfaces.</p><span class="lab-endpoint">POST /api/auth/login · POST /api/auth/register · GET /api/auth/me · POST /api/auth/logout</span></article>
+        <article class="lab-item"><h3>SQL injection in lab authentication</h3><p>A separate synthetic login query interpolates both fields and returns verbose SQLite errors.</p><span class="lab-endpoint">GET /api/labs/auth-sqli?username=…&amp;password=…</span></article>
+        <article class="lab-item"><h3>CSRF state change</h3><p>Cookie-authenticated profile change uses a state-changing GET without a CSRF token.</p><span class="lab-endpoint">GET /api/labs/csrf/profile?bio=…</span></article>
+        <article class="lab-item"><h3>Unsigned JWT validation</h3><p>The training verifier trusts a decoded JWT payload without checking its signature or expiry.</p><span class="lab-endpoint">GET /api/labs/jwt/issue · GET /api/labs/jwt/me</span></article>
+        <article class="lab-item"><h3>Checkout business logic and order BOLA</h3><p>Checkout trusts client-supplied price and quantity; synthetic orders are retrievable without ownership checks.</p><span class="lab-endpoint">GET /api/labs/shop/products · POST /api/labs/shop/checkout · GET /api/labs/shop/orders/:id</span></article>
+        <article class="lab-item"><h3>Admin moderation</h3><p>Admin-only user management plus post deletion and virtual comments/likes attributed to a selected demo account.</p><span class="lab-endpoint">/api/admin/* · Sign in with admin / admin123</span></article>
+      </div>
+    </section>
+    <section class="lab-group">
+      <h2>Demo accounts and reset</h2>
+      <p><strong>Admin:</strong> admin / admin123 · <strong>Members:</strong> alice / alice123, bob / bob123, nour / nour123. All identities and records are fictional.</p>
+      <p>To restore seed data, stop the server, remove <code>data/lab.sqlite</code>, and start it again. Volatile uploads disappear when the server stops.</p>
+      <p>The repository README contains setup steps and manual exercise walkthroughs.</p>
+    </section>
+  </main>
+</body>
+</html>

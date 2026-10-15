@@ -1,0 +1,12 @@
+node_modules/
+data/
+uploads/
+npm-debug.log*
+*.zip
+linkup-social-security-lab/
+
+# Local pentest evidence and generated report QA material
+artifacts/browser-test-data/
+artifacts/pentest-report-work/
+reports/*-QA.pdf
+reports/*.unclean.docx

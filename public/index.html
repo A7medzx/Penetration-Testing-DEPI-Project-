@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1877f2">
+  <title>LinkUp</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <!-- ======================================================= -->
+  <!-- Top Navigation Bar (Facebook-inspired)                  -->
+  <!-- ======================================================= -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a class="brand" href="/" title="LinkUp Home">
+        <span class="brand-symbol">lu</span>
+        <span class="brand-text">link<span class="brand-accent">up</span></span>
+      </a>
+      <div class="search-container">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input id="search-input" type="search" placeholder="Search people and posts..." autocomplete="off" aria-label="Search">
+          <button id="search-btn" class="search-submit" data-action="search" title="Submit Search">Search</button>
+        </div>
+        <div id="search-results" class="search-popover hidden" role="region" aria-label="Search results"></div>
+      </div>
+    </div>
+
+    <nav class="topbar-center" aria-label="Primary Navigation">
+      <button class="nav-tab active" data-action="nav-home" title="Home Feed" aria-label="Home Feed">
+        <span class="tab-icon">🏠</span>
+        <span class="tab-label">Home</span>
+      </button>
+      <button class="nav-tab" data-action="nav-discover" title="Discover People" aria-label="Discover">
+        <span class="tab-icon">👥</span>
+        <span class="tab-label">Friends</span>
+      </button>
+      <button class="nav-tab" data-action="nav-saved" title="Saved Posts" aria-label="Saved">
+        <span class="tab-icon">🔖</span>
+        <span class="tab-label">Saved</span>
+      </button>
+    </nav>
+
+    <div class="topbar-right">
+      <div class="local-badge" title="Bound to 127.0.0.1">
+        <span class="badge-dot"></span>
+        <span class="badge-text">LOCAL LAB</span>
+      </div>
+
+      <!-- Guest State Buttons (when logged out) -->
+      <div id="topbar-guest-actions" class="topbar-guest-actions hidden">
+        <button class="btn-top-login" data-action="open-login">Log In</button>
+        <button class="btn-top-signup" data-action="open-signup">Sign Up</button>
+      </div>
+
+      <!-- Logged-in User Actions -->
+      <div id="topbar-user-actions" class="topbar-user-actions">
+        <button class="icon-circle-btn" data-action="open-creator" title="Creator Studio & Lab Tools">⚡</button>
+        <button class="icon-circle-btn" data-action="messages" title="Chats" aria-label="Chats">💬</button>
+        <button class="icon-circle-btn has-badge" data-action="notifications" title="Notifications" aria-label="Notifications">
+          🔔<span class="badge-counter">3</span>
+        </button>
+
+        <div class="account-menu-wrap">
+          <button id="header-avatar-btn" class="avatar-header-btn" data-action="toggle-account-menu" title="Account Menu" aria-label="Account">
+            <img id="header-avatar-img" src="/assets/alice-profile.png" alt="Profile">
+          </button>
+
+          <!-- Facebook-style Account Menu Dropdown -->
+          <div id="account-dropdown" class="account-dropdown hidden">
+            <div class="dropdown-user-tile" data-action="my-profile">
+              <img id="dropdown-avatar-img" class="dropdown-avatar" src="/assets/alice-profile.png" alt="">
+              <div class="dropdown-user-info">
+                <strong id="dropdown-user-name">Alice Chen</strong>
+                <small id="dropdown-user-handle">@alice · View Profile</small>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" data-action="open-creator">
+              <span class="dropdown-item-icon">⚡</span>
+              <span>Creator Studio & Dev Tools</span>
+            </button>
+            <button class="dropdown-item" data-action="open-signup">
+              <span class="dropdown-item-icon">➕</span>
+              <span>Create New Account</span>
+            </button>
+            <button class="dropdown-item" data-action="open-login">
+              <span class="dropdown-item-icon">🔄</span>
+              <span>Switch Demo Account</span>
+            </button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item item-danger" data-action="logout-action">
+              <span class="dropdown-item-icon">🚪</span>
+              <span>Log Out</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================= -->
+  <!-- Main Application Layout (Three-Column Facebook Design)  -->
+  <!-- ======================================================= -->
+  <div class="app-layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar-left">
+      <div id="sidebar-user-section">
+        <button class="user-profile-tile" data-action="my-profile" title="View your profile">
+          <img id="sidebar-avatar" class="tile-avatar" src="/assets/alice-profile.png" alt="Avatar">
+          <div class="tile-info">
+            <strong id="sidebar-name">Alice Chen</strong>
+            <span id="sidebar-handle">@alice</span>
+          </div>
+        </button>
+      </div>
+
+      <nav class="side-nav">
+        <button class="side-link active" data-action="nav-home">
+          <span class="side-icon">📰</span>
+          <span class="side-title">Home Feed</span>
+        </button>
+        <button class="side-link" data-action="nav-discover">
+          <span class="side-icon">👥</span>
+          <span class="side-title">Friends & Discover</span>
+        </button>
+        <button class="side-link" data-action="nav-saved">
+          <span class="side-icon">🔖</span>
+          <span class="side-title">Saved Bookmarks</span>
+        </button>
+        <button class="side-link" data-action="open-creator">
+          <span class="side-icon">⚡</span>
+          <span class="side-title">Creator & Lab Tools</span>
+        </button>
+        <a class="side-link" href="/labs.html" style="text-decoration:none">
+          <span class="side-icon">🧪</span>
+          <span class="side-title">Pentest Lab Directory</span>
+        </a>
+      </nav>
+
+      <div class="side-divider"></div>
+
+      <div class="circles-section">
+        <div class="section-header-mini">
+          <span>YOUR CIRCLES</span>
+          <button class="mini-action-btn" data-action="nav-discover">Explore</button>
+        </div>
+        <a href="#circles" class="circle-item" data-search="photography">
+          <span class="circle-pill pill-blue"></span>
+          <span class="circle-name">Alexandria Photographers</span>
+          <small class="circle-count">14</small>
+        </a>
+        <a href="#circles" class="circle-item" data-search="coffee">
+          <span class="circle-pill pill-amber"></span>
+          <span class="circle-name">Specialty Coffee Roasters</span>
+          <small class="circle-count">9</small>
+        </a>
+        <a href="#circles" class="circle-item" data-search="design">
+          <span class="circle-pill pill-green"></span>
+          <span class="circle-name">UI & Product Designers</span>
+          <small class="circle-count">12</small>
+        </a>
+        <a href="#circles" class="circle-item" data-search="bakery">
+          <span class="circle-pill pill-purple"></span>
+          <span class="circle-name">Artisanal Bakery Crawl</span>
+          <small class="circle-count">7</small>
+        </a>
+      </div>
+
+      <div class="safety-box">
+        <div class="safety-title">🛡️ Contained Environment</div>
+        <p>This social network is a safe, offline testing target bound to <code>127.0.0.1</code>.</p>
+      </div>
+
+      <footer class="sidebar-footer">
+        <p>LinkUp v2.0 · Localhost Practice Lab</p>
+        <p>Privacy · Terms · Cookies</p>
+      </footer>
+    </aside>
+
+    <!-- CENTER FEED COLUMN -->
+    <main class="feed-center" id="main-feed-area">
+
+      <!-- STORIES CAROUSEL -->
+      <section class="stories-bar" aria-label="Stories">
+        <!-- Create Story Card -->
+        <button class="story-card create-story-card" data-action="story-create" title="Create your 24h story">
+          <div class="create-story-img-wrap">
+            <img id="story-creator-preview" src="/assets/alice-profile.png" alt="Create story">
+          </div>
+          <div class="create-story-btn-circle">+</div>
+          <span class="create-story-label">Create Story</span>
+        </button>
+
+        <!-- Dynamic Stories list -->
+        <div id="story-list" class="story-stream"></div>
+      </section>
+
+      <!-- POST COMPOSER CARD (For Logged-in Users) -->
+      <section class="composer-card" id="composer-card">
+        <div class="composer-header">
+          <img id="composer-avatar" class="composer-avatar-img" src="/assets/alice-profile.png" alt="User">
+          <textarea id="post-body" placeholder="What's on your mind?" rows="2"></textarea>
+        </div>
+
+        <!-- Optional Link with SSRF Preview -->
+        <div class="composer-link-row">
+          <span class="link-icon">🔗</span>
+          <input id="post-link" placeholder="Share a link (e.g., http://mock.internal/status)" aria-label="Link input">
+          <button class="btn-subtle" data-action="preview-link" title="Fetch in-process link preview">Preview Link</button>
+        </div>
+        <div id="link-preview-box" class="link-preview-box hidden"></div>
+
+        <!-- Attached File indicator -->
+        <div id="composer-file-preview" class="file-preview-strip hidden">
+          <span id="composer-file-name">filename.png</span>
+          <button id="composer-file-remove" class="file-remove-btn" title="Remove file">×</button>
+        </div>
+
+        <div class="composer-footer">
+          <div class="composer-actions">
+            <label class="action-btn-pill" for="post-file" title="Upload photo or attachment">
+              <span class="action-btn-icon icon-green">🖼️</span>
+              <span>Photo / File</span>
+            </label>
+            <input type="file" id="post-file" class="visually-hidden">
+
+            <button class="action-btn-pill" data-action="add-feeling">
+              <span class="action-btn-icon icon-yellow">😊</span>
+              <span>Feeling</span>
+            </button>
+            <button class="action-btn-pill" data-action="add-location">
+              <span class="action-btn-icon icon-red">📍</span>
+              <span>Location</span>
+            </button>
+          </div>
+          <button class="btn-primary" data-action="post-submit">Post</button>
+        </div>
+      </section>
+
+      <!-- GUEST CALLOUT CARD (When Logged Out) -->
+      <section class="composer-card guest-welcome-card hidden" id="guest-welcome-card">
+        <h3>Welcome to LinkUp</h3>
+        <p>Log in or create an account to share posts, like updates, and connect with people.</p>
+        <div class="guest-card-buttons">
+          <button class="btn-primary" data-action="open-login">Log In</button>
+          <button class="btn-green-large" data-action="open-signup">Create Account</button>
+        </div>
+      </section>
+
+      <!-- FEED MODE TABS & REFRESH -->
+      <div class="feed-filter-bar">
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-action="filter-for-you">For You</button>
+          <button class="filter-tab" data-action="filter-following">Following</button>
+          <button class="filter-tab" data-action="filter-saved">Saved</button>
+        </div>
+        <button class="btn-text-icon" data-action="refresh-feed" title="Refresh Feed">↻ Refresh</button>
+      </div>
+
+      <!-- FEED POSTS LIST -->
+      <section id="feed-list" class="feed-posts-container">
+        <div class="loading-state">Loading LinkUp community updates...</div>
+      </section>
+    </main>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="sidebar-right">
+
+      <!-- QUICK DEMO SWITCHER / WELCOME CARD -->
+      <section class="widget-card welcome-widget">
+        <div class="widget-badge">COMMUNITY ACCESS</div>
+        <h3>Accounts & Access</h3>
+        <p>Switch between demo accounts or create a new user profile.</p>
+        <div class="demo-quick-buttons">
+          <button class="btn-demo-pill" data-action="quick-login" data-user="alice" data-pass="alice123">Alice</button>
+          <button class="btn-demo-pill" data-action="quick-login" data-user="bob" data-pass="bob123">Bob</button>
+          <button class="btn-demo-pill" data-action="quick-login" data-user="nour" data-pass="nour123">Nour</button>
+          <button class="btn-demo-pill" data-action="quick-login" data-user="admin" data-pass="admin123">Admin</button>
+        </div>
+        <div class="widget-actions-split">
+          <button class="btn-outline-half" data-action="open-login">Log In</button>
+          <button class="btn-green-half" data-action="open-signup">Sign Up</button>
+        </div>
+      </section>
+
+      <!-- CREATOR STUDIO WIDGET CARD (Click to open full tools) -->
+      <section class="widget-card creator-cta-card">
+        <div class="creator-title-row">
+          <span class="creator-spark">⚡</span>
+          <div>
+            <strong>Creator Studio & Dev Tools</strong>
+            <small>Inspect link SSRF, virtual files, LFI & optimizer</small>
+          </div>
+        </div>
+        <button class="btn-outline-full" style="margin-top:10px;" data-action="open-creator">Open Dev & Lab Tools ↗</button>
+      </section>
+
+      <!-- SUGGESTED FRIENDS -->
+      <section class="widget-card" id="discover-widget">
+        <div class="widget-header">
+          <h4>People You May Know</h4>
+          <button class="btn-link-mini" data-action="view-all-users">See All</button>
+        </div>
+        <div id="suggested-users-list" class="suggested-users-list"></div>
+      </section>
+
+      <!-- POPULAR TOPICS -->
+      <section class="widget-card">
+        <div class="widget-header">
+          <h4>Trending in Community</h4>
+        </div>
+        <div class="trend-item" data-search="Corniche">
+          <span class="trend-category">Photography · Trending</span>
+          <strong>#AlexandriaCorniche</strong>
+          <span class="trend-meta">48 people sharing photos</span>
+        </div>
+        <div class="trend-item" data-search="coffee">
+          <span class="trend-category">Lifestyle · Popular</span>
+          <strong>#SpecialtyCoffeeMeetup</strong>
+          <span class="trend-meta">31 comments today</span>
+        </div>
+        <div class="trend-item" data-search="croissants">
+          <span class="trend-category">Food & Bakery · Local</span>
+          <strong>#ArtisanPastries</strong>
+          <span class="trend-meta">19 recommendations</span>
+        </div>
+      </section>
+
+    </aside>
+  </div>
+
+  <!-- ======================================================= -->
+  <!-- Modals & Dialogs                                        -->
+  <!-- ======================================================= -->
+
+  <!-- AUTHENTICATION DIALOG (LOG IN) -->
+  <dialog id="login-dialog" class="app-modal">
+    <div class="modal-card auth-modal-card">
+      <div class="modal-top">
+        <h3>Log In to LinkUp</h3>
+        <button class="modal-close-x" data-action="close-login" aria-label="Close">×</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- In-Modal Error Notification -->
+        <div id="login-error-msg" class="auth-error-banner hidden"></div>
+
+        <form id="login-form" class="auth-form">
+          <div class="form-group">
+            <label for="login-username">Username or Email</label>
+            <input id="login-username" placeholder="Username (e.g. alice, bob) or email" autocomplete="username" required>
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" placeholder="Password" autocomplete="current-password" required>
+          </div>
+
+          <button type="submit" class="btn-primary-large">Log In</button>
+        </form>
+
+        <div class="demo-login-section">
+          <span class="demo-section-label">One-Click Demo Accounts:</span>
+          <div class="demo-quick-buttons">
+            <button class="btn-demo-pill" data-action="quick-login" data-user="alice" data-pass="alice123">Alice (Designer)</button>
+            <button class="btn-demo-pill" data-action="quick-login" data-user="bob" data-pass="bob123">Bob (Coffee)</button>
+            <button class="btn-demo-pill" data-action="quick-login" data-user="nour" data-pass="nour123">Nour (Photo)</button>
+            <button class="btn-demo-pill" data-action="quick-login" data-user="admin" data-pass="admin123">Admin (Morgan)</button>
+          </div>
+        </div>
+
+        <div class="auth-divider"><span>or</span></div>
+
+        <button type="button" class="btn-green-large" data-action="open-signup-from-login">Create New Account</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- REGISTRATION DIALOG (SIGN UP) -->
+  <dialog id="signup-dialog" class="app-modal">
+    <div class="modal-card auth-modal-card">
+      <div class="modal-top">
+        <div>
+          <h3>Sign Up for LinkUp</h3>
+          <p class="modal-subtext">It's quick and easy.</p>
+        </div>
+        <button class="modal-close-x" data-action="close-signup" aria-label="Close">×</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- In-Modal Error Notification -->
+        <div id="signup-error-msg" class="auth-error-banner hidden"></div>
+
+        <form id="signup-form" class="auth-form">
+          <div class="form-group">
+            <label for="signup-name">Full Name</label>
+            <input id="signup-name" placeholder="Your display name (e.g. Sarah Mansour)" required>
+          </div>
+
+          <div class="form-group">
+            <label for="signup-username">Username</label>
+            <input id="signup-username" placeholder="Choose a username (3+ chars, e.g. sarah)" autocomplete="username" required>
+          </div>
+
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input id="signup-password" type="password" placeholder="Password (at least 3 characters)" autocomplete="new-password" required>
+          </div>
+
+          <div class="form-group">
+            <label for="signup-email">Email (Optional)</label>
+            <input id="signup-email" type="email" placeholder="sarah@linkup.invalid">
+          </div>
+
+          <div class="form-group">
+            <label for="signup-bio">Bio (Optional)</label>
+            <input id="signup-bio" placeholder="A brief intro about yourself...">
+          </div>
+
+          <div class="form-group">
+            <label>Choose Profile Photo</label>
+            <div class="avatar-picker-row">
+              <label class="avatar-option">
+                <input type="radio" name="signupAvatar" value="/assets/alice-profile.png" checked>
+                <img src="/assets/alice-profile.png" alt="Avatar 1">
+              </label>
+              <label class="avatar-option">
+                <input type="radio" name="signupAvatar" value="/assets/bob-profile.png">
+                <img src="/assets/bob-profile.png" alt="Avatar 2">
+              </label>
+              <label class="avatar-option">
+                <input type="radio" name="signupAvatar" value="/assets/workspace-morning.png">
+                <img src="/assets/workspace-morning.png" alt="Avatar 3">
+              </label>
+              <label class="avatar-option">
+                <input type="radio" name="signupAvatar" value="/assets/alexandria-evening.png">
+                <img src="/assets/alexandria-evening.png" alt="Avatar 4">
+              </label>
+              <label class="avatar-option">
+                <input type="radio" name="signupAvatar" value="/assets/cafe-friends.png">
+                <img src="/assets/cafe-friends.png" alt="Avatar 5">
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-green-large">Create Account</button>
+        </form>
+
+        <div class="auth-footer-link">
+          Already have an account? <a href="#" data-action="open-login-from-signup">Log In</a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- CREATOR STUDIO & DEV TOOLS MODAL (DEDICATED FULL VIEW) -->
+  <dialog id="creator-dialog" class="app-modal creator-modal-dialog">
+    <div class="modal-card creator-modal-card">
+      <div class="modal-top">
+        <div class="creator-modal-header-title">
+          <span class="creator-spark">⚡</span>
+          <div>
+            <h3>Creator Studio & Security Lab Tools</h3>
+            <p class="modal-subtext">Integrated into natural app tools. All mock services are safely contained.</p>
+          </div>
+        </div>
+        <button class="modal-close-x" data-action="close-creator" aria-label="Close">×</button>
+      </div>
+
+      <div class="modal-body creator-modal-body">
+        <!-- 1. Open Redirect -->
+        <div class="lab-card-block">
+          <div class="lab-block-header">
+            <h4>1. Open Redirect (Shared Invite Destination)</h4>
+            <span class="lab-method-badge">GET /go?to=...</span>
+          </div>
+          <p class="lab-desc">Issues unvalidated HTTP 302 redirect. Click presets or enter an external URL.</p>
+          <div class="lab-input-row">
+            <input id="modal-redirect-input" value="https://example.com/invitation">
+            <button class="btn-lab" data-action="modal-lab-redirect">Open Link ↗</button>
+          </div>
+          <div class="lab-presets-row">
+            <span>Presets:</span>
+            <button class="btn-preset-pill" data-fill="modal-redirect-input" data-val="/api/health">/api/health</button>
+            <button class="btn-preset-pill" data-fill="modal-redirect-input" data-val="https://example.com/welcome">https://example.com</button>
+            <button class="btn-preset-pill" data-fill="modal-redirect-input" data-val="https://google.com">https://google.com</button>
+          </div>
+        </div>
+
+        <!-- 2. SSRF Mock -->
+        <div class="lab-card-block">
+          <div class="lab-block-header">
+            <h4>2. Server-Side Request Forgery (Link Inspector)</h4>
+            <span class="lab-method-badge">GET /api/labs/ssrf?url=...</span>
+          </div>
+          <p class="lab-desc">Queries the contained in-process upstream cluster at <code>http://mock.internal/*</code>.</p>
+          <div class="lab-input-row">
+            <input id="modal-ssrf-input" value="http://mock.internal/metadata/instance">
+            <button class="btn-lab" data-action="modal-lab-ssrf">Fetch Preview</button>
+          </div>
+          <div class="lab-presets-row">
+            <span>Presets:</span>
+            <button class="btn-preset-pill" data-fill="modal-ssrf-input" data-val="http://mock.internal/metadata/instance">/metadata/instance</button>
+            <button class="btn-preset-pill" data-fill="modal-ssrf-input" data-val="http://mock.internal/private/notes">/private/notes</button>
+            <button class="btn-preset-pill" data-fill="modal-ssrf-input" data-val="http://mock.internal/status">/status</button>
+            <button class="btn-preset-pill" data-fill="modal-ssrf-input" data-val="http://mock.internal/api/cloud-credentials">/api/cloud-credentials</button>
+          </div>
+          <pre id="modal-ssrf-output" class="lab-code-output">Click "Fetch Preview" to inspect mock internal response...</pre>
+        </div>
+
+        <!-- 3. Path Traversal -->
+        <div class="lab-card-block">
+          <div class="lab-block-header">
+            <h4>3. Path Traversal (Archive Exporter)</h4>
+            <span class="lab-method-badge">GET /api/labs/files?path=...</span>
+          </div>
+          <p class="lab-desc">Resolves files against the virtual catalog. Host filesystem is never touched.</p>
+          <div class="lab-input-row">
+            <input id="modal-traversal-input" value="../../private/flag.txt">
+            <button class="btn-lab" data-action="modal-lab-traversal">Read File</button>
+          </div>
+          <div class="lab-presets-row">
+            <span>Presets:</span>
+            <button class="btn-preset-pill" data-fill="modal-traversal-input" data-val="../../private/flag.txt">../../private/flag.txt</button>
+            <button class="btn-preset-pill" data-fill="modal-traversal-input" data-val="../../etc/passwd">../../etc/passwd</button>
+            <button class="btn-preset-pill" data-fill="modal-traversal-input" data-val="../../private/config.ini">../../private/config.ini</button>
+            <button class="btn-preset-pill" data-fill="modal-traversal-input" data-val="welcome.txt">welcome.txt</button>
+          </div>
+          <pre id="modal-traversal-output" class="lab-code-output">Virtual file catalog response...</pre>
+        </div>
+
+        <!-- 4. LFI -->
+        <div class="lab-card-block">
+          <div class="lab-block-header">
+            <h4>4. Local File Inclusion (Theme Fragment Preview)</h4>
+            <span class="lab-method-badge">GET /api/labs/include?page=...</span>
+          </div>
+          <p class="lab-desc">Dynamically includes template fragments from the virtual catalog.</p>
+          <div class="lab-input-row">
+            <input id="modal-include-input" value="about.html">
+            <button class="btn-lab" data-action="modal-lab-include">Render Fragment</button>
+          </div>
+          <div class="lab-presets-row">
+            <span>Presets:</span>
+            <button class="btn-preset-pill" data-fill="modal-include-input" data-val="about.html">about.html</button>
+            <button class="btn-preset-pill" data-fill="modal-include-input" data-val="help.html">help.html</button>
+            <button class="btn-preset-pill" data-fill="modal-include-input" data-val="../../etc/passwd">../../etc/passwd</button>
+          </div>
+          <div id="modal-include-output" class="lab-render-output">Rendered fragment appears here...</div>
+        </div>
+
+        <!-- 5. Simulated Command Injection -->
+        <div class="lab-card-block">
+          <div class="lab-block-header">
+            <h4>5. Simulated Command Injection (Media Optimizer)</h4>
+            <span class="lab-method-badge">GET /api/labs/command?name=...</span>
+          </div>
+          <p class="lab-desc">Parses shell chaining operators in memory without invoking child processes.</p>
+          <div class="lab-input-row">
+            <input id="modal-command-input" value="avatar.png; whoami">
+            <button class="btn-lab" data-action="modal-lab-command">Run Optimizer</button>
+          </div>
+          <div class="lab-presets-row">
+            <span>Presets:</span>
+            <button class="btn-preset-pill" data-fill="modal-command-input" data-val="avatar.png; whoami">avatar.png; whoami</button>
+            <button class="btn-preset-pill" data-fill="modal-command-input" data-val="photo.png; cat /etc/passwd">photo.png; cat /etc/passwd</button>
+            <button class="btn-preset-pill" data-fill="modal-command-input" data-val="cover.png; ls -la">cover.png; ls -la</button>
+            <button class="btn-preset-pill" data-fill="modal-command-input" data-val="image.png; uname -a">image.png; uname -a</button>
+          </div>
+          <pre id="modal-command-output" class="lab-code-output">Simulated optimizer output...</pre>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- PROFILE & TIMELINE MODAL (REAL SOCIAL APP STYLE) -->
+  <dialog id="profile-dialog" class="app-modal profile-modal-wrap">
+    <div class="modal-card profile-card-inner">
+      <!-- Cover banner -->
+      <div class="profile-header-banner" id="profile-banner">
+        <button class="modal-close-floating" data-action="close-profile" aria-label="Close">×</button>
+      </div>
+
+      <!-- Clean profile identity section below cover banner -->
+      <div class="profile-header-content">
+        <div class="profile-avatar-row">
+          <div class="profile-avatar-wrap">
+            <img id="profile-avatar-img" class="profile-avatar-lg" src="/assets/alice-profile.png" alt="Profile avatar">
+          </div>
+          <div class="profile-meta-main">
+            <div class="profile-name-row">
+              <h2 id="profile-display-name">Alice Chen</h2>
+              <span id="profile-role-badge" class="role-badge">Member</span>
+            </div>
+            <span id="profile-username" class="profile-username-tag">@alice</span>
+            <div class="profile-counts-row" id="profile-counts">1 post · 3 followers · 3 following</div>
+          </div>
+          <div class="profile-actions-area" id="profile-actions-area">
+            <!-- Follow or Edit button here -->
+          </div>
+        </div>
+
+        <div class="profile-details-section">
+          <p id="profile-bio" class="profile-bio-text"></p>
+          <div class="profile-extra-details">
+            <span id="profile-location">📍 Alexandria, Egypt</span>
+            <span id="profile-email">✉️ alice@linkup.invalid</span>
+            <span id="profile-website">🌐 https://alicechen.invalid</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Profile Drawer -->
+      <div id="profile-edit-box" class="profile-edit-box hidden">
+        <h4>Edit Your Profile</h4>
+        <div class="edit-grid">
+          <label>Display Name <input id="edit-name"></label>
+          <label>Location <input id="edit-loc"></label>
+          <label>Website <input id="edit-web"></label>
+          <label class="col-span-2">Bio <textarea id="edit-bio-input" rows="2"></textarea></label>
+        </div>
+        <div class="edit-btn-row">
+          <button class="btn-primary" data-action="save-profile-btn">Save Changes</button>
+          <button class="btn-subtle" data-action="cancel-profile-edit">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Profile Tabs -->
+      <div class="profile-nav-tabs">
+        <button class="profile-tab active">Posts & Timeline</button>
+        <button class="profile-tab">About</button>
+        <button class="profile-tab">Photos</button>
+      </div>
+
+      <!-- User's Timeline Posts -->
+      <div id="profile-posts-list" class="profile-posts-list"></div>
+    </div>
+  </dialog>
+
+  <!-- STORY VIEWER OVERLAY -->
+  <dialog id="story-viewer-dialog" class="story-viewer-modal">
+    <div class="story-screen">
+      <div class="story-progress-bar">
+        <div id="story-progress-fill" class="story-progress-fill"></div>
+      </div>
+      <div class="story-top-user">
+        <img id="story-view-avatar" class="story-tiny-avatar" src="" alt="Author">
+        <div class="story-user-meta">
+          <strong id="story-view-name">Author</strong>
+          <span id="story-view-time">Active Story</span>
+        </div>
+        <button class="story-close-btn" data-action="close-story-viewer">×</button>
+      </div>
+      <div class="story-visual-container">
+        <img id="story-view-img" class="story-main-image" src="" alt="Story media">
+      </div>
+      <div class="story-bottom-caption">
+        <p id="story-view-caption"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- STORY CREATOR MODAL -->
+  <dialog id="story-creator-dialog" class="app-modal">
+    <div class="modal-card">
+      <div class="modal-top">
+        <h3>Create a 24-Hour Story</h3>
+        <button class="modal-close-x" data-action="close-story-creator">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="story-caption-input">Caption / Message</label>
+          <input id="story-caption-input" placeholder="What moment are you sharing?" maxlength="300">
+        </div>
+        <div class="form-group">
+          <label for="story-file-input">Select Photo (Optional)</label>
+          <input type="file" id="story-file-input" accept="image/png,image/jpeg,image/gif,image/webp">
+        </div>
+        <div class="auth-buttons">
+          <button class="btn-primary-large" data-action="publish-story-btn">Share Story</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- FLOATING TOAST NOTIFICATION -->
+  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>LinkUp CSRF local proof</title>
+<h1>LinkUp local CSRF proof</h1>
+<p>This same-site, cross-origin proof targets only the local lab on port 3000.</p>
+<p>Sign in to LinkUp as alice in another tab, then load this page. The request changes the current synthetic user's bio if the lab cookie is sent.</p>
+<img alt="" width="1" height="1" src="http://127.0.0.1:3000/api/labs/csrf/profile?bio=CSRF-PROOF-RESTORE-AFTER-TEST">
+<p>After it loads, inspect <code>http://127.0.0.1:3000/api/profile</code>. Restore the original bio after evidence capture.</p>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "linkup-social-security-lab",
+  "version": "2.0.0",
+  "private": true,
+  "description": "LinkUp — A Facebook-inspired social practice platform with contained web security training exercises",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node scripts/local-pentest-smoke.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2"
+  }
+}
